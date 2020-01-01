@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class PasswordCheckState : IHackerState
 {
-    private Dictionary<int, string[]> levelPasswords = new Dictionary<int, string[]>();
-
     private int selectedLevel;
     private string requiredPassword;
     private HackerStateMachine stateMachine;
@@ -18,12 +16,36 @@ public class PasswordCheckState : IHackerState
     public void Enter()
     {
         // Create the levels allowed and their available passwords
-        levelPasswords.Add(1, new[] { "MyPass", "EzPz" });
-        levelPasswords.Add(2, new[] { "FooBar", "FibBam" });
-        levelPasswords.Add(3, new[] { "Hello", "World" });
+        SetRequiredPassword(selectedLevel);
 
+        Terminal.WriteLine("Please enter your password, hint: " + requiredPassword.Anagram());
+    }
+
+    public void Execute(string input)
+    {
+        // Check our password for this level against what the user entered.
+        if (requiredPassword.Equals(input))
+        {
+            // If the password matches, the user wins.
+            this.stateMachine.ChangeState(new WinState(selectedLevel));
+        }
+        else
+        {
+            Terminal.WriteLine("Invalid password, try again");
+        }
+    }
+
+    public void Exit()
+    {
+        Terminal.ClearScreen();
+    }
+
+    private void SetRequiredPassword(int level)
+    {
         // Pull out the array of passwords for the level choosen by the user
-        if (!levelPasswords.TryGetValue(this.selectedLevel, out string[] passwords))
+        Dictionary<int, string[]> levelPasswords = stateMachine.GetLevelPasswords();
+
+        if (!levelPasswords.TryGetValue(level, out string[] passwords))
         {
             Debug.LogError("Level that was provided does not exist in the Dictionary of allowed levels. Level given was '" + selectedLevel + "'");
             Terminal.WriteLine("Invalid level.");
@@ -40,26 +62,5 @@ public class PasswordCheckState : IHackerState
         // where it changes with each User attempt.
         int index = UnityEngine.Random.Range(0, passwords.Length);
         requiredPassword = passwords[index];
-
-        Terminal.WriteLine("Please enter your password:");
-    }
-
-    public void Execute(string input)
-    {
-        // Check our password for this level against what the user entered.
-        if (requiredPassword.Equals(input))
-        {
-            // If the password matches, the user wins.
-            this.stateMachine.ChangeState(new WinState());
-        }
-        else
-        {
-            Terminal.WriteLine("Invalid password, try again");
-        }
-    }
-
-    public void Exit()
-    {
-        Terminal.ClearScreen();
     }
 }

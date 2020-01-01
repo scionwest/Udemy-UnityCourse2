@@ -1,4 +1,6 @@
-﻿public class MenuState : IHackerState
+﻿using System.Collections.Generic;
+
+public class MenuState : IHackerState
 {
     private string startupMessage;
     private int selectedLevel;
@@ -36,9 +38,9 @@
             return;
         }
 
-        // We only support 3 levels.
-        // TODO: How do we look up the number of levels consistently across states? Potentially move level dictionary from PasswordCheck to HackerStateMachine.
-        if (selectedLevel > 3)
+        // We only support so many levels.
+        Dictionary<int, string[]> levels = stateMachine.GetLevelPasswords();
+        if (selectedLevel > levels.Count)
         {
             Terminal.WriteLine("Invalid level - must be less than 3.");
             return;

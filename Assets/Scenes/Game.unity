@@ -275,6 +275,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1359512571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 965cd7041c72a477a80b86cced531021, type: 3}
+  m_Script: {fileID: 11500000, guid: 38fb1ae2cc00b48249992ae3b72dbbd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startupMessage: Hello there

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Hacker : MonoBehaviour
+public class HackerGame : MonoBehaviour
 {
     public string startupMessage = "Hello there";
     private HackerStateMachine stateMachine = new HackerStateMachine();
